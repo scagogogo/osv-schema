@@ -1,4 +1,4 @@
-module github.com/scagogogo/osv
+module github.com/scagogogo/osv-schema
 
 go 1.18
 

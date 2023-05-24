@@ -1,4 +1,4 @@
-package osv
+package osv_schema
 
 import (
 	"database/sql"
