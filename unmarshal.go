@@ -1,4 +1,4 @@
-package model
+package osv
 
 import "encoding/json"
 
