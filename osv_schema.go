@@ -32,8 +32,6 @@ type OsvSchema[EcosystemSpecific, DatabaseSpecific any] struct {
 	DatabaseSpecific DatabaseSpecific                                 `json:"database_specific" yaml:"database_specific" db:"database_specific"`
 	Credits          *Credits                                         `json:"credits" yaml:"credits" db:"credits"`
 
-	// 原始的osv格式的json的哈希
-	OsvHash string `json:"osv_hash" yaml:"osv_hash" db:"osv_hash"`
 }
 
 var _ sql.Scanner = &OsvSchema[any, any]{}
