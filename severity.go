@@ -8,6 +8,43 @@ import (
 	"reflect"
 )
 
+// ------------------------------------------------ ---------------------------------------------------------------------
+
+type SeveritySlice []*Severity
+
+var _ sql.Scanner = &SeveritySlice{}
+var _ driver.Valuer = &SeveritySlice{}
+
+func (x *SeveritySlice) Scan(src any) error {
+	if src == nil {
+		return nil
+	}
+	bytes, ok := src.([]byte)
+	if !ok {
+		return fmt.Errorf("scan error")
+	}
+	if len(bytes) == 0 {
+		return nil
+	}
+	return json.Unmarshal(bytes, &x)
+}
+
+func (x SeveritySlice) Value() (driver.Value, error) {
+	if len(x) == 0 {
+		return nil, nil
+	}
+	marshal, err := json.Marshal(x)
+	if err != nil {
+		return nil, err
+	}
+	if len(marshal) == 0 {
+		return nil, nil
+	}
+	return string(marshal), nil
+}
+
+// ------------------------------------------------ ---------------------------------------------------------------------
+
 // Severity
 // Example:
 //    {

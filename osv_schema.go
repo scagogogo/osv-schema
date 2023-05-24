@@ -22,15 +22,15 @@ type OsvSchema[EcosystemSpecific, DatabaseSpecific any] struct {
 	// TODO 2023-5-23 19:10:45 草这个字段啥意思...
 	Withdrawn string `json:"withdrawn" yaml:"withdrawn" db:"withdrawn" bson:"withdrawn"`
 
-	Aliases          Aliases                                          `json:"aliases" yaml:"aliases" db:"aliases" bson:"aliases"`
-	Related          Related                                          `json:"related" yaml:"related" db:"related" bson:"related"`
-	Summary          string                                           `json:"summary" yaml:"summary" db:"summary" bson:"summary"`
-	Details          string                                           `json:"details" yaml:"details" db:"details" bson:"details"`
-	Severity         []*Severity                                      `json:"severity" yaml:"severity" db:"severity" bson:"severity"`
-	Affected         []*Affected[EcosystemSpecific, DatabaseSpecific] `json:"affected" yaml:"affected" db:"affected" bson:"affected"`
-	References       []*References                                    `json:"references" yaml:"references" db:"references" bson:"references"`
-	DatabaseSpecific DatabaseSpecific                                 `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific"`
-	Credits          *Credits                                         `json:"credits" yaml:"credits" db:"credits" bson:"credits"`
+	Aliases          Aliases                                            `json:"aliases" yaml:"aliases" db:"aliases" bson:"aliases"`
+	Related          Related                                            `json:"related" yaml:"related" db:"related" bson:"related"`
+	Summary          string                                             `json:"summary" yaml:"summary" db:"summary" bson:"summary"`
+	Details          string                                             `json:"details" yaml:"details" db:"details" bson:"details"`
+	Severity         SeveritySlice                                      `json:"severity" yaml:"severity" db:"severity" bson:"severity"`
+	Affected         AffectedSlice[EcosystemSpecific, DatabaseSpecific] `json:"affected" yaml:"affected" db:"affected" bson:"affected"`
+	References       References                                         `json:"references" yaml:"references" db:"references" bson:"references"`
+	DatabaseSpecific DatabaseSpecific                                   `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific"`
+	Credits          *Credits                                           `json:"credits" yaml:"credits" db:"credits" bson:"credits"`
 }
 
 var _ sql.Scanner = &OsvSchema[any, any]{}

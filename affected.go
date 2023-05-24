@@ -8,6 +8,43 @@ import (
 	"reflect"
 )
 
+// ------------------------------------------------ ---------------------------------------------------------------------
+
+type AffectedSlice[EcosystemSpecific, DatabaseSpecific any] []*Affected[EcosystemSpecific, DatabaseSpecific]
+
+var _ sql.Scanner = &AffectedSlice[any, any]{}
+var _ driver.Valuer = &AffectedSlice[any, any]{}
+
+func (x *AffectedSlice[EcosystemSpecific, DatabaseSpecific]) Scan(src any) error {
+	if src == nil {
+		return nil
+	}
+	bytes, ok := src.([]byte)
+	if !ok {
+		return fmt.Errorf("scan error")
+	}
+	if len(bytes) == 0 {
+		return nil
+	}
+	return json.Unmarshal(bytes, &x)
+}
+
+func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) Value() (driver.Value, error) {
+	if len(x) == 0 {
+		return nil, nil
+	}
+	marshal, err := json.Marshal(x)
+	if err != nil {
+		return nil, err
+	}
+	if len(marshal) == 0 {
+		return nil, nil
+	}
+	return string(marshal), nil
+}
+
+// ------------------------------------------------ ---------------------------------------------------------------------
+
 // Affected 此漏洞的影响范围
 //Example:
 // "affected": [
