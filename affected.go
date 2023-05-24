@@ -43,6 +43,16 @@ func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) Value() (driver.Valu
 	return string(marshal), nil
 }
 
+// HasEcosystem 判断被影响到的包是否有包含给定的包管理器的，一般用于过滤
+func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) HasEcosystem(ecosystem string) bool {
+	for _, item := range x {
+		if item.Package != nil && item.Package.Ecosystem == ecosystem {
+			return true
+		}
+	}
+	return false
+}
+
 // ------------------------------------------------ ---------------------------------------------------------------------
 
 // Affected 此漏洞的影响范围

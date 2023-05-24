@@ -31,16 +31,6 @@ type OsvSchema[EcosystemSpecific, DatabaseSpecific any] struct {
 //var _ sql.Scanner = &OsvSchema[any, any]{}
 //var _ driver.Valuer = &OsvSchema[any, any]{}
 //
-//// AffectedHasEcosystem 判断被影响到的包是否有包含给定的包管理器的，一般用于过滤
-//func (x *OsvSchema[EcosystemSpecific, DatabaseSpecific]) AffectedHasEcosystem(ecosystem string) bool {
-//	for _, item := range x.Affected {
-//		if item.Package != nil && item.Package.Ecosystem == ecosystem {
-//			return true
-//		}
-//	}
-//	return false
-//}
-//
 //func (x *OsvSchema[EcosystemSpecific, DatabaseSpecific]) Value() (driver.Value, error) {
 //	if x == nil {
 //		return nil, nil
