@@ -1,11 +1,6 @@
 package osv
 
 import (
-	"database/sql"
-	"database/sql/driver"
-	"encoding/json"
-	"fmt"
-	"reflect"
 	"time"
 )
 
