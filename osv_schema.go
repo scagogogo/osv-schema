@@ -22,8 +22,8 @@ type OsvSchema[EcosystemSpecific, DatabaseSpecific any] struct {
 	// TODO 2023-5-23 19:10:45 草这个字段啥意思...
 	Withdrawn string `json:"withdrawn" yaml:"withdrawn" db:"withdrawn" bson:"withdrawn"`
 
-	Aliases          []string                                         `json:"aliases" yaml:"aliases" db:"aliases" bson:"aliases"`
-	Related          []string                                         `json:"related" yaml:"related" db:"related" bson:"related"`
+	Aliases          Aliases                                          `json:"aliases" yaml:"aliases" db:"aliases" bson:"aliases"`
+	Related          Related                                          `json:"related" yaml:"related" db:"related" bson:"related"`
 	Summary          string                                           `json:"summary" yaml:"summary" db:"summary" bson:"summary"`
 	Details          string                                           `json:"details" yaml:"details" db:"details" bson:"details"`
 	Severity         []*Severity                                      `json:"severity" yaml:"severity" db:"severity" bson:"severity"`
