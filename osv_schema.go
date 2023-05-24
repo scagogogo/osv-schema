@@ -31,11 +31,20 @@ type OsvSchema[EcosystemSpecific, DatabaseSpecific any] struct {
 	References       []*References                                    `json:"references" yaml:"references" db:"references"`
 	DatabaseSpecific DatabaseSpecific                                 `json:"database_specific" yaml:"database_specific" db:"database_specific"`
 	Credits          *Credits                                         `json:"credits" yaml:"credits" db:"credits"`
-
 }
 
 var _ sql.Scanner = &OsvSchema[any, any]{}
 var _ driver.Valuer = &OsvSchema[any, any]{}
+
+// AffectedHasEcosystem 判断被影响到的包是否有包含给定的包管理器的，一般用于过滤
+func (x *OsvSchema[EcosystemSpecific, DatabaseSpecific]) AffectedHasEcosystem(ecosystem string) bool {
+	for _, item := range x.Affected {
+		if item.Package != nil && item.Package.Ecosystem == ecosystem {
+			return true
+		}
+	}
+	return false
+}
 
 func (x *OsvSchema[EcosystemSpecific, DatabaseSpecific]) Value() (driver.Value, error) {
 	if x == nil {
