@@ -15,6 +15,24 @@ type SeveritySlice []*Severity
 var _ sql.Scanner = &SeveritySlice{}
 var _ driver.Valuer = &SeveritySlice{}
 
+func (x SeveritySlice) GetCVSS3() *Severity {
+	for _, s := range x {
+		if s.Type == SeverityTypeCVSS3 {
+			return s
+		}
+	}
+	return nil
+}
+
+func (x SeveritySlice) GetCVSS2() *Severity {
+	for _, s := range x {
+		if s.Type == SeverityTypeCVSS2 {
+			return s
+		}
+	}
+	return nil
+}
+
 func (x *SeveritySlice) Scan(src any) error {
 	if src == nil {
 		return nil
@@ -45,6 +63,13 @@ func (x SeveritySlice) Value() (driver.Value, error) {
 
 // ------------------------------------------------ ---------------------------------------------------------------------
 
+type SeverityType string
+
+const (
+	SeverityTypeCVSS2 SeverityType = "CVSS_V2"
+	SeverityTypeCVSS3 SeverityType = "CVSS_V3"
+)
+
 // Severity
 // Example:
 //    {
@@ -52,8 +77,8 @@ func (x SeveritySlice) Value() (driver.Value, error) {
 //      "score": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
 //    }
 type Severity struct {
-	Type  string `json:"type" yaml:"type" db:"type" bson:"type" gorm:"type"`
-	Score string `json:"score" yaml:"score" db:"score" bson:"score" gorm:"score"`
+	Type  SeverityType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"type"`
+	Score string       `json:"score" yaml:"score" db:"score" bson:"score" gorm:"score"`
 }
 
 var _ sql.Scanner = &Severity{}
