@@ -5,12 +5,24 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 type Aliases []string
 
 var _ sql.Scanner = &Aliases{}
 var _ driver.Valuer = &Aliases{}
+
+// GetCVE 获取别名中的CVE编号
+func (x Aliases) GetCVE() string {
+	for _, s := range x {
+		s = strings.ToUpper(s)
+		if strings.HasPrefix(s, "CVE-") {
+			return s
+		}
+	}
+	return ""
+}
 
 func (x *Aliases) Scan(src any) error {
 	if src == nil {
