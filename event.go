@@ -18,10 +18,10 @@ import (
 //
 // ]
 type Event struct {
-	Introduced   string `json:"introduced" yaml:"introduced" db:"introduced" bson:"introduced"`
-	Fixed        string `json:"fixed" yaml:"fixed" db:"fixed" bson:"fixed"`
-	LastAffected string `json:"last_affected" yaml:"last_affected" db:"last_affected" bson:"last_affected"`
-	Limit        string `json:"limit" yaml:"limit" db:"limit" bson:"limit"`
+	Introduced   string `json:"introduced" yaml:"introduced" db:"introduced" bson:"introduced" gorm:"introduced"`
+	Fixed        string `json:"fixed" yaml:"fixed" db:"fixed" bson:"fixed" gorm:"fixed"`
+	LastAffected string `json:"last_affected" yaml:"last_affected" db:"last_affected" bson:"last_affected" gorm:"last_affected"`
+	Limit        string `json:"limit" yaml:"limit" db:"limit" bson:"limit" gorm:"limit"`
 }
 
 var _ sql.Scanner = &Event{}

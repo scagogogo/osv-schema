@@ -52,8 +52,8 @@ func (x SeveritySlice) Value() (driver.Value, error) {
 //      "score": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
 //    }
 type Severity struct {
-	Type  string `json:"type" yaml:"type" db:"type" bson:"type"`
-	Score string `json:"score" yaml:"score" db:"score" bson:"score"`
+	Type  string `json:"type" yaml:"type" db:"type" bson:"type" gorm:"type"`
+	Score string `json:"score" yaml:"score" db:"score" bson:"score" gorm:"score"`
 }
 
 var _ sql.Scanner = &Severity{}

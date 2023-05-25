@@ -81,16 +81,16 @@ func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) HasEcosystem(ecosyst
 //
 // ],
 type Affected[EcosystemSpecific, DatabaseSpecific any] struct {
-	Package  *Package                   `json:"package" yaml:"package" db:"package" bson:"package"`
-	Ranges   []*Range[DatabaseSpecific] `json:"ranges" yaml:"ranges" db:"ranges" bson:"ranges"`
-	Severity []*Severity                `json:"severity" yaml:"severity" db:"severity" bson:"severity"`
-	Versions []string                   `json:"versions" yaml:"versions" db:"versions" bson:"versions"`
+	Package  *Package                   `json:"package" yaml:"package" db:"package" bson:"package" gorm:"package;serializer:json"`
+	Ranges   []*Range[DatabaseSpecific] `json:"ranges" yaml:"ranges" db:"ranges" bson:"ranges" gorm:"ranges;serializer:json"`
+	Severity []*Severity                `json:"severity" yaml:"severity" db:"severity" bson:"severity" gorm:"severity;serializer:json"`
+	Versions []string                   `json:"versions" yaml:"versions" db:"versions" bson:"versions" gorm:"versions;serializer:json"`
 
 	// 由包管理器决定
-	EcosystemSpecific EcosystemSpecific `json:"ecosystem_specific" yaml:"ecosystem_specific" db:"ecosystem_specific" bson:"ecosystem_specific"`
+	EcosystemSpecific EcosystemSpecific `json:"ecosystem_specific" yaml:"ecosystem_specific" db:"ecosystem_specific" bson:"ecosystem_specific" gorm:"ecosystem_specific;serializer:json"`
 
 	// 由具体实现的数据库决定
-	DatabaseSpecific DatabaseSpecific `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific"`
+	DatabaseSpecific DatabaseSpecific `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"database_specific;serializer:json"`
 }
 
 var _ sql.Scanner = &Affected[any, any]{}

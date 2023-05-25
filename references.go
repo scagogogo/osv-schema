@@ -53,8 +53,8 @@ func (x References) Value() (driver.Value, error) {
 //    }
 //
 type Reference struct {
-	Type string `json:"type" yaml:"type" db:"type" bson:"type"`
-	URL  string `json:"url" yaml:"url" db:"url" bson:"url"`
+	Type string `json:"type" yaml:"type" db:"type" bson:"type" gorm:"type"`
+	URL  string `json:"url" yaml:"url" db:"url" bson:"url" gorm:"url"`
 }
 
 var _ sql.Scanner = &Reference{}
