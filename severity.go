@@ -5,7 +5,9 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
+	"github.com/golang-infrastructure/go-pointer"
 	"reflect"
+	"strconv"
 )
 
 // ------------------------------------------------ ---------------------------------------------------------------------
@@ -66,23 +68,70 @@ func (x SeveritySlice) Value() (driver.Value, error) {
 type SeverityType string
 
 const (
+
+	// SeverityTypeCVSS2 e.g."AV:L/AC:M/Au:N/C:N/I:P/A:C"
 	SeverityTypeCVSS2 SeverityType = "CVSS_V2"
+
+	// SeverityTypeCVSS3 CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N
 	SeverityTypeCVSS3 SeverityType = "CVSS_V3"
 )
 
 // Severity
 // Example:
-//    {
-//      "type": "CVSS_V3",
-//      "score": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
-//    }
+//
+//	{
+//	  "type": "CVSS_V3",
+//	  "score": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+//	}
+//
+// Document: https://ossf.github.io/osv-schema/#severity-field
 type Severity struct {
 	Type  SeverityType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
 	Score string       `json:"score" yaml:"score" db:"score" bson:"score" gorm:"column:score"`
+
+	score *float64
+	err   error
 }
 
 var _ sql.Scanner = &Severity{}
 var _ driver.Valuer = &Severity{}
+
+// ------------------------------------------------- --------------------------------------------------------------------
+
+func (x *Severity) GetScore() float64 {
+	score, _ := x.GetScoreAsFloat()
+	return score
+}
+
+func (x *Severity) GetScoreAsPointer() *float64 {
+	score, err := x.GetScoreAsFloat()
+	if err != nil {
+		return nil
+	} else {
+		return pointer.ToPointer(score)
+	}
+}
+
+func (x *Severity) GetScoreAsFloat() (float64, error) {
+	if x.err != nil {
+		return 0, x.err
+	} else if x.score != nil {
+		return pointer.FromPointer(x.score), nil
+	}
+	if x.Score == "" {
+		x.err = fmt.Errorf("score can not be empty")
+		return 0, x.err
+	}
+	score, err := strconv.ParseFloat(x.Score, 64)
+	if err != nil {
+		x.err = err
+		return 0, err
+	}
+	x.score = pointer.ToPointer(score)
+	return score, nil
+}
+
+// ------------------------------------------------- --------------------------------------------------------------------
 
 func (x *Severity) Value() (driver.Value, error) {
 	if x == nil {
@@ -101,3 +150,5 @@ func (x *Severity) Scan(src any) error {
 	}
 	return json.Unmarshal(bytes, &x)
 }
+
+// ------------------------------------------------- --------------------------------------------------------------------

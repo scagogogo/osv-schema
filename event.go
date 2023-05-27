@@ -8,6 +8,12 @@ import (
 	"reflect"
 )
 
+// ------------------------------------------------- --------------------------------------------------------------------
+
+type Events []*Event
+
+// ------------------------------------------------- --------------------------------------------------------------------
+
 //	"events": [
 //	 {
 //	   "introduced": "2.3.0"
@@ -27,6 +33,22 @@ type Event struct {
 var _ sql.Scanner = &Event{}
 var _ driver.Valuer = &Event{}
 
+func (x *Event) IsIntroduced() bool {
+	return x.Introduced != ""
+}
+
+func (x *Event) IsFixed() bool {
+	return x.Fixed != ""
+}
+
+func (x *Event) IsLastAffected() bool {
+	return x.LastAffected != ""
+}
+
+func (x *Event) IsLimit() bool {
+	return x.Limit != ""
+}
+
 func (x *Event) Value() (driver.Value, error) {
 	if x == nil {
 		return nil, nil
@@ -44,3 +66,5 @@ func (x *Event) Scan(src any) error {
 	}
 	return json.Unmarshal(bytes, &x)
 }
+
+// ------------------------------------------------- --------------------------------------------------------------------
