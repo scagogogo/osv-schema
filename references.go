@@ -47,14 +47,14 @@ func (x References) Value() (driver.Value, error) {
 
 // Reference
 // Example:
-//    {
-//      "type": "WEB",
-//      "url": "https://github.com/tensorflow/tensorflow/security/advisories/GHSA-vxv8-r8q2-63xw"
-//    }
 //
+//	{
+//	  "type": "WEB",
+//	  "url": "https://github.com/tensorflow/tensorflow/security/advisories/GHSA-vxv8-r8q2-63xw"
+//	}
 type Reference struct {
-	Type string `json:"type" yaml:"type" db:"type" bson:"type" gorm:"type"`
-	URL  string `json:"url" yaml:"url" db:"url" bson:"url" gorm:"url"`
+	Type string `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
+	URL  string `json:"url" yaml:"url" db:"url" bson:"url" gorm:"column:url"`
 }
 
 var _ sql.Scanner = &Reference{}

@@ -9,9 +9,9 @@ import (
 )
 
 type Credits struct {
-	Name    string   `json:"name" yaml:"name" db:"name" bson:"name" gorm:"name"`
-	Contact []string `json:"contact" yaml:"contact" db:"contact" bson:"contact" gorm:"contact;serializer:json"`
-	Type    string   `json:"type" yaml:"type" db:"type" bson:"type" gorm:"type"`
+	Name    string   `json:"name" yaml:"name" db:"name" bson:"name" gorm:"column:name"`
+	Contact []string `json:"contact" yaml:"contact" db:"contact" bson:"contact" gorm:"column:contact;serializer:json"`
+	Type    string   `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
 }
 
 var _ sql.Scanner = &Credits{}

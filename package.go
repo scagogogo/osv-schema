@@ -13,9 +13,9 @@ import (
 //	  "name": "sprout"
 //	},
 type Package struct {
-	Ecosystem string `json:"ecosystem" yaml:"ecosystem" db:"ecosystem" bson:"ecosystem" gorm:"ecosystem"`
-	Name      string `json:"name" yaml:"name" db:"name" bson:"name" gorm:"name"`
-	PUrl      string `json:"purl" yaml:"purl" db:"purl" bson:"purl" gorm:"purl"`
+	Ecosystem string `json:"ecosystem" yaml:"ecosystem" db:"ecosystem" bson:"ecosystem" gorm:"column:ecosystem"`
+	Name      string `json:"name" yaml:"name" db:"name" bson:"name" gorm:"column:name"`
+	PUrl      string `json:"purl" yaml:"purl" db:"purl" bson:"purl" gorm:"column:purl"`
 }
 
 var _ sql.Scanner = &Package{}

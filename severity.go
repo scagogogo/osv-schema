@@ -77,8 +77,8 @@ const (
 //      "score": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
 //    }
 type Severity struct {
-	Type  SeverityType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"type"`
-	Score string       `json:"score" yaml:"score" db:"score" bson:"score" gorm:"score"`
+	Type  SeverityType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
+	Score string       `json:"score" yaml:"score" db:"score" bson:"score" gorm:"column:score"`
 }
 
 var _ sql.Scanner = &Severity{}

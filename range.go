@@ -20,12 +20,12 @@ import (
 //	  ]
 //	}
 type Range[DatabaseSpecific any] struct {
-	Type   string   `json:"type" yaml:"type" db:"type" bson:"type" gorm:"type"`
-	Repo   string   `json:"repo" yaml:"repo" db:"repo" bson:"repo" gorm:"repo"`
-	Events []*Event `json:"events" yaml:"events" db:"events" bson:"events" gorm:"events"`
+	Type   string   `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
+	Repo   string   `json:"repo" yaml:"repo" db:"repo" bson:"repo" gorm:"column:repo"`
+	Events []*Event `json:"events" yaml:"events" db:"events" bson:"events" gorm:"column:events"`
 
 	// 由具体实现的数据库决定
-	DatabaseSpecific DatabaseSpecific `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"database_specific"`
+	DatabaseSpecific DatabaseSpecific `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"column:database_specific"`
 }
 
 var _ sql.Scanner = &Range[any]{}
