@@ -4,12 +4,11 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
-	"fmt"
-	"reflect"
 )
 
 // ------------------------------------------------ ---------------------------------------------------------------------
 
+// AffectedSlice 表示一个影响范围的集合
 type AffectedSlice[EcosystemSpecific, DatabaseSpecific any] []*Affected[EcosystemSpecific, DatabaseSpecific]
 
 var _ sql.Scanner = &AffectedSlice[any, any]{}
@@ -21,7 +20,7 @@ func (x *AffectedSlice[EcosystemSpecific, DatabaseSpecific]) Scan(src any) error
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("scan error")
+		return wrapScanError(src, x)
 	}
 	if len(bytes) == 0 {
 		return nil
@@ -45,6 +44,7 @@ func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) Value() (driver.Valu
 
 // HasEcosystem 判断被影响到的包是否有包含给定的包管理器的，一般用于过滤
 func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) HasEcosystem(ecosystem Ecosystem) bool {
+	// 这里认为这个数组不会特别大，所以就O(n)扫描了
 	for _, item := range x {
 		if item.Package != nil && item.Package.Ecosystem == ecosystem {
 			return true
@@ -53,9 +53,30 @@ func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) HasEcosystem(ecosyst
 	return false
 }
 
+// Filter 过滤影响范围
+func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) Filter(filterFunc func(affected *Affected[EcosystemSpecific, DatabaseSpecific]) bool) AffectedSlice[EcosystemSpecific, DatabaseSpecific] {
+	slice := make([]*Affected[EcosystemSpecific, DatabaseSpecific], 0)
+	for _, item := range x {
+		if filterFunc(item) {
+			slice = append(slice, item)
+		}
+	}
+	return slice
+}
+
+// FilterByEcosystem 根据ecosystem过滤影响范围
+func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) FilterByEcosystem(ecosystem Ecosystem) AffectedSlice[EcosystemSpecific, DatabaseSpecific] {
+	if x == nil {
+		return nil
+	}
+	return x.Filter(func(affected *Affected[EcosystemSpecific, DatabaseSpecific]) bool {
+		return affected.Package.Ecosystem == ecosystem
+	})
+}
+
 // ------------------------------------------------ ---------------------------------------------------------------------
 
-// Affected 此漏洞的影响范围
+// Affected 漏洞的某个影响范围，它可能会影响到很多个版本范围，这表示其中一个
 // Example:
 // "affected": [
 //
@@ -117,7 +138,7 @@ func (x *Affected[EcosystemSpecific, DatabaseSpecific]) Scan(src any) error {
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("can not unmarshal from %s to %s", reflect.TypeOf(src).Name(), reflect.TypeOf(x).Name())
+		return wrapScanError(src, x)
 	}
 	return json.Unmarshal(bytes, &x)
 }

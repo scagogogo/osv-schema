@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
-	"fmt"
-	"reflect"
+	"strings"
 )
 
 // ------------------------------------------------- --------------------------------------------------------------------
 
+// Ecosystem 表示包管理器的类型，比如 Maven
 type Ecosystem string
 
 const (
@@ -119,9 +119,40 @@ func (x *Package) Scan(src any) error {
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("can not unmarshal from %s to %s", reflect.TypeOf(src).Name(), reflect.TypeOf(x).Name())
+		return wrapScanError(src, x)
 	}
 	return json.Unmarshal(bytes, &x)
+}
+
+// IsMaven 判断包的类型是否是Maven的包
+func (x *Package) IsMaven() bool {
+	return x.Ecosystem == EcosystemMaven
+}
+
+// GetGroupID 如果ecosystem是maven的话，则name是GroupId:ArtifactID这样拼接在一起的，提供两个单独获取的API
+func (x *Package) GetGroupID() string {
+	if x == nil {
+		return ""
+	}
+	split := strings.SplitN(x.Name, ":", 2)
+	if len(split) != 2 {
+		return ""
+	} else {
+		return split[0]
+	}
+}
+
+// GetArtifactID @see GetGroupID
+func (x *Package) GetArtifactID() string {
+	if x == nil {
+		return ""
+	}
+	split := strings.SplitN(x.Name, ":", 2)
+	if len(split) != 2 {
+		return ""
+	} else {
+		return split[1]
+	}
 }
 
 // ------------------------------------------------- --------------------------------------------------------------------

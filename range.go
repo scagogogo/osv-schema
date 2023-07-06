@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
-	"fmt"
-	"reflect"
 )
 
 // ------------------------------------------------- --------------------------------------------------------------------
@@ -37,6 +35,8 @@ const (
 
 // ------------------------------------------------- --------------------------------------------------------------------
 
+// Range 用于表示被漏洞影响的范围
+// Example:
 //	{
 //	  "type": "ECOSYSTEM",
 //	  "events": [
@@ -49,9 +49,13 @@ const (
 //	  ]
 //	}
 type Range[DatabaseSpecific any] struct {
-	Type   RangeType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
-	Repo   string    `json:"repo" yaml:"repo" db:"repo" bson:"repo" gorm:"column:repo"`
-	Events Events    `json:"events" yaml:"events" db:"events" bson:"events" gorm:"column:events;serializer:json"`
+
+	// 范围的类型，如果是软件包的话通常情况下看的是ecosystem
+	Type RangeType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
+	Repo string    `json:"repo" yaml:"repo" db:"repo" bson:"repo" gorm:"column:repo"`
+
+	// 具体的范围
+	Events Events `json:"events" yaml:"events" db:"events" bson:"events" gorm:"column:events;serializer:json"`
 
 	// 由具体实现的数据库决定
 	DatabaseSpecific DatabaseSpecific `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"column:database_specific;serializer:json"`
@@ -73,7 +77,7 @@ func (x *Range[DatabaseSpecific]) Scan(src any) error {
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("can not unmarshal from %s to %s", reflect.TypeOf(src).Name(), reflect.TypeOf(x).Name())
+		return wrapScanError(src, x)
 	}
 	return json.Unmarshal(bytes, &x)
 }

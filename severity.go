@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/golang-infrastructure/go-pointer"
-	"reflect"
 	"strconv"
 )
 
@@ -41,7 +40,7 @@ func (x *SeveritySlice) Scan(src any) error {
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("scan error")
+		return wrapScanError(src, x)
 	}
 	if len(bytes) == 0 {
 		return nil
@@ -146,7 +145,7 @@ func (x *Severity) Scan(src any) error {
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("can not unmarshal from %s to %s", reflect.TypeOf(src).Name(), reflect.TypeOf(x).Name())
+		return wrapScanError(src, x)
 	}
 	return json.Unmarshal(bytes, &x)
 }

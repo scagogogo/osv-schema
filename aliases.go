@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
-	"fmt"
 	"strings"
 )
 
+// Aliases 一般可能会放漏洞编号啥的
 type Aliases []string
 
 var _ sql.Scanner = &Aliases{}
@@ -24,13 +24,24 @@ func (x Aliases) GetCVE() string {
 	return ""
 }
 
+// Filter 过滤出需要的编号
+func (x Aliases) Filter(filterFunc func(alias string) bool) Aliases {
+	slice := make([]string, 0)
+	for _, alias := range x {
+		if filterFunc(alias) {
+			slice = append(slice, alias)
+		}
+	}
+	return slice
+}
+
 func (x *Aliases) Scan(src any) error {
 	if src == nil {
 		return nil
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("scan error")
+		return wrapScanError(src, x)
 	}
 	if len(bytes) == 0 {
 		return nil

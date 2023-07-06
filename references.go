@@ -5,7 +5,6 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
-	"reflect"
 )
 
 // ------------------------------------------------ ---------------------------------------------------------------------
@@ -117,8 +116,12 @@ const (
 //	  "url": "https://github.com/tensorflow/tensorflow/security/advisories/GHSA-vxv8-r8q2-63xw"
 //	}
 type Reference struct {
+
+	// 引用的类型
 	Type ReferenceType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
-	URL  string        `json:"url" yaml:"url" db:"url" bson:"url" gorm:"column:url"`
+
+	// 具体的引用链接
+	URL string `json:"url" yaml:"url" db:"url" bson:"url" gorm:"column:url"`
 }
 
 var _ sql.Scanner = &Reference{}
@@ -137,7 +140,7 @@ func (x *Reference) Scan(src any) error {
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("can not unmarshal from %s to %s", reflect.TypeOf(src).Name(), reflect.TypeOf(x).Name())
+		return wrapScanError(src, x)
 	}
 	return json.Unmarshal(bytes, &x)
 }

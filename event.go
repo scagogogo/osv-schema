@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
-	"fmt"
-	"reflect"
 )
 
 // ------------------------------------------------- --------------------------------------------------------------------
@@ -24,10 +22,17 @@ type Events []*Event
 //
 // ]
 type Event struct {
-	Introduced   string `json:"introduced" yaml:"introduced" db:"introduced" bson:"introduced" gorm:"column:introduced"`
-	Fixed        string `json:"fixed" yaml:"fixed" db:"fixed" bson:"fixed" gorm:"column:fixed"`
+
+	// 哪个版本引入的
+	Introduced string `json:"introduced" yaml:"introduced" db:"introduced" bson:"introduced" gorm:"column:introduced"`
+
+	// 哪个版本修复的
+	Fixed string `json:"fixed" yaml:"fixed" db:"fixed" bson:"fixed" gorm:"column:fixed"`
+
+	// 已知的最后影响版本是哪个
 	LastAffected string `json:"last_affected" yaml:"last_affected" db:"last_affected" bson:"last_affected" gorm:"column:last_affected"`
-	Limit        string `json:"limit" yaml:"limit" db:"limit" bson:"limit" gorm:"column:limit"`
+
+	Limit string `json:"limit" yaml:"limit" db:"limit" bson:"limit" gorm:"column:limit"`
 }
 
 var _ sql.Scanner = &Event{}
@@ -62,7 +67,7 @@ func (x *Event) Scan(src any) error {
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("can not unmarshal from %s to %s", reflect.TypeOf(src).Name(), reflect.TypeOf(x).Name())
+		return wrapScanError(src, x)
 	}
 	return json.Unmarshal(bytes, &x)
 }

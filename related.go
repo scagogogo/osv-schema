@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
-	"fmt"
 )
 
 type Related []string
@@ -18,7 +17,7 @@ func (x *Related) Scan(src any) error {
 	}
 	bytes, ok := src.([]byte)
 	if !ok {
-		return fmt.Errorf("scan error")
+		return wrapScanError(src, x)
 	}
 	if len(bytes) == 0 {
 		return nil
