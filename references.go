@@ -118,10 +118,10 @@ const (
 type Reference struct {
 
 	// 引用的类型
-	Type ReferenceType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
+	Type ReferenceType `mapstructure:"type" json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
 
 	// 具体的引用链接
-	URL string `json:"url" yaml:"url" db:"url" bson:"url" gorm:"column:url"`
+	URL string `mapstructure:"url" json:"url" yaml:"url" db:"url" bson:"url" gorm:"column:url"`
 }
 
 var _ sql.Scanner = &Reference{}

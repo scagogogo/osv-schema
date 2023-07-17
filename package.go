@@ -94,13 +94,13 @@ const (
 type Package struct {
 
 	// 包管理器类型
-	Ecosystem Ecosystem `json:"ecosystem" yaml:"ecosystem" db:"ecosystem" bson:"ecosystem" gorm:"column:ecosystem"`
+	Ecosystem Ecosystem `mapstructure:"ecosystem" json:"ecosystem" yaml:"ecosystem" db:"ecosystem" bson:"ecosystem" gorm:"column:ecosystem"`
 
 	// 包的名字
-	Name string `json:"name" yaml:"name" db:"name" bson:"name" gorm:"column:name"`
+	Name string `mapstructure:"name" json:"name" yaml:"name" db:"name" bson:"name" gorm:"column:name"`
 
 	// https://github.com/package-url/purl-spec
-	PackageUrl string `json:"purl" yaml:"purl" db:"purl" bson:"purl" gorm:"column:purl"`
+	PackageUrl string `mapstructure:"purl" json:"purl" yaml:"purl" db:"purl" bson:"purl" gorm:"column:purl"`
 }
 
 var _ sql.Scanner = &Package{}

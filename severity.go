@@ -85,8 +85,8 @@ const (
 //
 // Document: https://ossf.github.io/osv-schema/#severity-field
 type Severity struct {
-	Type  SeverityType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
-	Score string       `json:"score" yaml:"score" db:"score" bson:"score" gorm:"column:score"`
+	Type  SeverityType `mapstructure:"type" json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
+	Score string       `mapstructure:"score" json:"score" yaml:"score" db:"score" bson:"score" gorm:"column:score"`
 
 	score *float64
 	err   error

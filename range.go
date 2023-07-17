@@ -51,14 +51,14 @@ const (
 type Range[DatabaseSpecific any] struct {
 
 	// 范围的类型，如果是软件包的话通常情况下看的是ecosystem
-	Type RangeType `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
-	Repo string    `json:"repo" yaml:"repo" db:"repo" bson:"repo" gorm:"column:repo"`
+	Type RangeType `mapstructure:"type" json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
+	Repo string    `mapstructure:"repo" json:"repo" yaml:"repo" db:"repo" bson:"repo" gorm:"column:repo"`
 
 	// 具体的范围
-	Events Events `json:"events" yaml:"events" db:"events" bson:"events" gorm:"column:events;serializer:json"`
+	Events Events `mapstructure:"events" json:"events" yaml:"events" db:"events" bson:"events" gorm:"column:events;serializer:json"`
 
 	// 由具体实现的数据库决定
-	DatabaseSpecific DatabaseSpecific `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"column:database_specific;serializer:json"`
+	DatabaseSpecific DatabaseSpecific `mapstructure:"database_specific" json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"column:database_specific;serializer:json"`
 }
 
 var _ sql.Scanner = &Range[any]{}

@@ -104,22 +104,22 @@ func (x AffectedSlice[EcosystemSpecific, DatabaseSpecific]) FilterByEcosystem(ec
 type Affected[EcosystemSpecific, DatabaseSpecific any] struct {
 
 	// 被此漏洞影响到的包
-	Package *Package `json:"package" yaml:"package" db:"package" bson:"package" gorm:"column:package;serializer:json"`
+	Package *Package `mapstructure:"package" json:"package" yaml:"package" db:"package" bson:"package" gorm:"column:package;serializer:json"`
 
 	// 被影响到的这个包的哪些版本，通常是版本区间
-	Ranges []*Range[DatabaseSpecific] `json:"ranges" yaml:"ranges" db:"ranges" bson:"ranges" gorm:"column:ranges;serializer:json"`
+	Ranges []*Range[DatabaseSpecific] `mapstructure:"ranges" json:"ranges" yaml:"ranges" db:"ranges" bson:"ranges" gorm:"column:ranges;serializer:json"`
 
 	// 可选的严重级别
-	Severity []*Severity `json:"severity" yaml:"severity" db:"severity" bson:"severity" gorm:"column:severity;serializer:json"`
+	Severity []*Severity `mapstructure:"severity" json:"severity" yaml:"severity" db:"severity" bson:"severity" gorm:"column:severity;serializer:json"`
 
 	// 枚举出每一个受影响的版本
-	Versions []string `json:"versions" yaml:"versions" db:"versions" bson:"versions" gorm:"column:versions;serializer:json"`
+	Versions []string `mapstructure:"versions" json:"versions" yaml:"versions" db:"versions" bson:"versions" gorm:"column:versions;serializer:json"`
 
 	// 由包管理器决定
-	EcosystemSpecific EcosystemSpecific `json:"ecosystem_specific" yaml:"ecosystem_specific" db:"ecosystem_specific" bson:"ecosystem_specific" gorm:"column:ecosystem_specific;serializer:json"`
+	EcosystemSpecific EcosystemSpecific `mapstructure:"ecosystem_specific" json:"ecosystem_specific" yaml:"ecosystem_specific" db:"ecosystem_specific" bson:"ecosystem_specific" gorm:"column:ecosystem_specific;serializer:json"`
 
 	// 由具体实现的数据库决定
-	DatabaseSpecific DatabaseSpecific `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"column:database_specific;serializer:json"`
+	DatabaseSpecific DatabaseSpecific `mapstructure:"database_specific" json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"column:database_specific;serializer:json"`
 }
 
 var _ sql.Scanner = &Affected[any, any]{}

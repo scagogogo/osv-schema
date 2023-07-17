@@ -24,15 +24,15 @@ type Events []*Event
 type Event struct {
 
 	// 哪个版本引入的
-	Introduced string `json:"introduced" yaml:"introduced" db:"introduced" bson:"introduced" gorm:"column:introduced"`
+	Introduced string `mapstructure:"introduced" json:"introduced" yaml:"introduced" db:"introduced" bson:"introduced" gorm:"column:introduced"`
 
 	// 哪个版本修复的
-	Fixed string `json:"fixed" yaml:"fixed" db:"fixed" bson:"fixed" gorm:"column:fixed"`
+	Fixed string `mapstructure:"fixed" json:"fixed" yaml:"fixed" db:"fixed" bson:"fixed" gorm:"column:fixed"`
 
 	// 已知的最后影响版本是哪个
-	LastAffected string `json:"last_affected" yaml:"last_affected" db:"last_affected" bson:"last_affected" gorm:"column:last_affected"`
+	LastAffected string `mapstructure:"last_affected" json:"last_affected" yaml:"last_affected" db:"last_affected" bson:"last_affected" gorm:"column:last_affected"`
 
-	Limit string `json:"limit" yaml:"limit" db:"limit" bson:"limit" gorm:"column:limit"`
+	Limit string `mapstructure:"limit" json:"limit" yaml:"limit" db:"limit" bson:"limit" gorm:"column:limit"`
 }
 
 var _ sql.Scanner = &Event{}

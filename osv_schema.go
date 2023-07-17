@@ -9,42 +9,42 @@ import (
 type OsvSchema[EcosystemSpecific, DatabaseSpecific any] struct {
 
 	// OSV的版本
-	SchemaVersion string `json:"schema_version" yaml:"schema_version" db:"schema_version" bson:"schema_version" gorm:"column:schema_version"`
-	ID            string `json:"id" yaml:"id" db:"id" bson:"id" gorm:"column:id"`
+	SchemaVersion string `mapstructure:"schema_version" json:"schema_version" yaml:"schema_version" db:"schema_version" bson:"schema_version" gorm:"column:schema_version"`
+	ID            string `mapstructure:"id" json:"id" yaml:"id" db:"id" bson:"id" gorm:"column:id"`
 
 	// 修改日期
-	Modified time.Time `json:"modified" yaml:"modified" db:"modified" bson:"modified" gorm:"column:modified"`
+	Modified time.Time `mapstructure:"modified" json:"modified" yaml:"modified" db:"modified" bson:"modified" gorm:"column:modified"`
 
 	// 发布日期
-	Published time.Time `json:"published" yaml:"published" db:"published" bson:"published" gorm:"column:published"`
+	Published time.Time `mapstructure:"published" json:"published" yaml:"published" db:"published" bson:"published" gorm:"column:published"`
 
 	// TODO 2023-5-23 19:10:45 草这个字段啥意思...
-	Withdrawn string `json:"withdrawn" yaml:"withdrawn" db:"withdrawn" bson:"withdrawn" gorm:"column:withdrawn"`
+	Withdrawn string `mapstructure:"withdrawn" json:"withdrawn" yaml:"withdrawn" db:"withdrawn" bson:"withdrawn" gorm:"column:withdrawn"`
 
 	// 漏洞的编号
-	Aliases Aliases `json:"aliases" yaml:"aliases" db:"aliases" bson:"aliases" gorm:"column:aliases;serializer:json"`
+	Aliases Aliases `mapstructure:"aliases" json:"aliases" yaml:"aliases" db:"aliases" bson:"aliases" gorm:"column:aliases;serializer:json"`
 
-	Related Related `json:"related" yaml:"related" db:"related" bson:"related" gorm:"column:related;serializer:json"`
+	Related Related `mapstructure:"related" json:"related" yaml:"related" db:"related" bson:"related" gorm:"column:related;serializer:json"`
 
 	// 可以认为是漏洞标题啥的
-	Summary string `json:"summary" yaml:"summary" db:"summary" bson:"summary" gorm:"column:summary"`
+	Summary string `mapstructure:"summary" json:"summary" yaml:"summary" db:"summary" bson:"summary" gorm:"column:summary"`
 
 	// 可以认为是漏洞详情啥的
-	Details string `json:"details" yaml:"details" db:"details" bson:"details" gorm:"column:details"`
+	Details string `mapstructure:"details" json:"details" yaml:"details" db:"details" bson:"details" gorm:"column:details"`
 
 	// 漏洞的严重级别
-	Severity SeveritySlice `json:"severity" yaml:"severity" db:"severity" bson:"severity" gorm:"column:severity;serializer:json"`
+	Severity SeveritySlice `mapstructure:"severity" json:"severity" yaml:"severity" db:"severity" bson:"severity" gorm:"column:severity;serializer:json"`
 
 	// 漏洞的影响范围
-	Affected AffectedSlice[EcosystemSpecific, DatabaseSpecific] `json:"affected" yaml:"affected" db:"affected" bson:"affected" gorm:"column:affected;serializer:json"`
+	Affected AffectedSlice[EcosystemSpecific, DatabaseSpecific] `mapstructure:"affected" json:"affected" yaml:"affected" db:"affected" bson:"affected" gorm:"column:affected;serializer:json"`
 
 	// 参考资料
-	References References `json:"references" yaml:"references" db:"references" bson:"references" gorm:"column:references;serializer:json"`
+	References References `mapstructure:"references" json:"references" yaml:"references" db:"references" bson:"references" gorm:"column:references;serializer:json"`
 
 	// 漏洞库自己的实现规范
-	DatabaseSpecific DatabaseSpecific `json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"column:database_specific;serializer:json"`
+	DatabaseSpecific DatabaseSpecific `mapstructure:"database_specific" json:"database_specific" yaml:"database_specific" db:"database_specific" bson:"database_specific" gorm:"column:database_specific;serializer:json"`
 
-	Credits *Credits `json:"credits" yaml:"credits" db:"credits" bson:"credits" gorm:"column:credits;serializer:json"`
+	Credits *Credits `mapstructure:"credits" json:"credits" yaml:"credits" db:"credits" bson:"credits" gorm:"column:credits;serializer:json"`
 }
 
 //var _ sql.Scanner = &OsvSchema[any, any]{}

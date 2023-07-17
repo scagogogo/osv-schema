@@ -41,9 +41,9 @@ const (
 )
 
 type Credits struct {
-	Name    string   `json:"name" yaml:"name" db:"name" bson:"name" gorm:"column:name"`
-	Contact []string `json:"contact" yaml:"contact" db:"contact" bson:"contact" gorm:"column:contact;serializer:json"`
-	Type    string   `json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
+	Name    string   `mapstructure:"name" json:"name" yaml:"name" db:"name" bson:"name" gorm:"column:name"`
+	Contact []string `mapstructure:"contact" json:"contact" yaml:"contact" db:"contact" bson:"contact" gorm:"column:contact;serializer:json"`
+	Type    string   `mapstructure:"type" json:"type" yaml:"type" db:"type" bson:"type" gorm:"column:type"`
 }
 
 var _ sql.Scanner = &Credits{}
